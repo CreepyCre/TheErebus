@@ -4,12 +4,16 @@ import erebus.ModBlocks;
 import erebus.blocks.BlockDustLayer;
 import erebus.blocks.BlockHangingWeb;
 import erebus.blocks.BlockMandrake;
+import erebus.blocks.BlockPetrifiedWoodRock;
 import erebus.world.biomes.decorators.data.FeatureType;
 import erebus.world.biomes.decorators.data.OreSettings;
 import erebus.world.biomes.decorators.data.OreSettings.OreType;
 import erebus.world.biomes.decorators.data.SurfaceType;
+import erebus.world.feature.decoration.WorldGenPetrifiedTrees;
 import erebus.world.feature.decoration.WorldGenRockSpike;
 import erebus.world.feature.decoration.WorldGenScorchedWood;
+import erebus.world.feature.plant.WorldGenBigLogs;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 
@@ -53,6 +57,62 @@ public class BiomeDecoratorPetrifiedForest extends BiomeDecoratorBaseErebus {
 			}
 		}
 
+		for (attempt = 0; attempt < 5; attempt++) {
+			int length = rand.nextInt(5) + 4;
+			int baseRadius = rand.nextInt(3) + 2;
+			EnumFacing facing = rand.nextBoolean() ? EnumFacing.NORTH : EnumFacing.WEST;
+			xx = x + 16;
+			yy = rand.nextInt(118);
+			zz = z + 16;
+			BlockPos pos = new BlockPos(xx, yy, zz);
+			if (checkSurface(SurfaceType.VOLCANIC_ROCK, pos)) {
+				new WorldGenBigLogs(length, baseRadius, facing, ModBlocks.PETRIFIED_BARK_BROWN.getDefaultState().withProperty(BlockPetrifiedWoodRock.AXIS, facing == EnumFacing.NORTH ? EnumFacing.Axis.Z : EnumFacing.Axis.X), ModBlocks.PETRIFIED_LOG_INNER.getDefaultState(), true, ModBlocks.ORE_PETRIFIED_QUARTZ.getDefaultState()).generate(world, rand, pos.up());
+				break;
+			}
+		}
+
+		for (attempt = 0; attempt < 5; attempt++) {
+			int length = rand.nextInt(5) + 4;
+			int baseRadius = rand.nextInt(3) + 2;
+			EnumFacing facing = rand.nextBoolean() ? EnumFacing.NORTH : EnumFacing.WEST;
+			xx = x + 16;
+			yy = rand.nextInt(118);
+			zz = z + 16;
+			BlockPos pos = new BlockPos(xx, yy, zz);
+			if (checkSurface(SurfaceType.VOLCANIC_ROCK, pos)) {
+				new WorldGenBigLogs(length, baseRadius, facing, ModBlocks.PETRIFIED_BARK_RED.getDefaultState().withProperty(BlockPetrifiedWoodRock.AXIS, facing == EnumFacing.NORTH ? EnumFacing.Axis.Z : EnumFacing.Axis.X), ModBlocks.PETRIFIED_LOG_INNER.getDefaultState(), true, ModBlocks.ORE_PETRIFIED_QUARTZ.getDefaultState()).generate(world, rand, pos.up());
+				break;
+			}
+		}
+
+		for (attempt = 0; attempt < 3; attempt++) {
+			int length = rand.nextInt(5) + 4;
+			int baseRadius = rand.nextInt(3) + 2;
+			EnumFacing facing = rand.nextBoolean() ? EnumFacing.NORTH : EnumFacing.WEST;
+			xx = x + 16;
+			yy = rand.nextInt(118);
+			zz = z + 16;
+			BlockPos pos = new BlockPos(xx, yy, zz);
+			if (checkSurface(SurfaceType.VOLCANIC_ROCK, pos)) {
+				new WorldGenBigLogs(length, baseRadius, facing, ModBlocks.PETRIFIED_BARK_BROWN.getDefaultState().withProperty(BlockPetrifiedWoodRock.AXIS, facing == EnumFacing.NORTH ? EnumFacing.Axis.Z : EnumFacing.Axis.X)).generate(world, rand, pos.up());
+				break;
+			}
+		}
+
+		for (attempt = 0; attempt < 3; attempt++) {
+			int length = rand.nextInt(5) + 4;
+			int baseRadius = rand.nextInt(3) + 2;
+			EnumFacing facing = rand.nextBoolean() ? EnumFacing.NORTH : EnumFacing.WEST;
+			xx = x + 16;
+			yy = rand.nextInt(118);
+			zz = z + 16;
+			BlockPos pos = new BlockPos(xx, yy, zz);
+			if (checkSurface(SurfaceType.VOLCANIC_ROCK, pos)) {
+				new WorldGenBigLogs(length, baseRadius, facing, ModBlocks.PETRIFIED_BARK_RED.getDefaultState().withProperty(BlockPetrifiedWoodRock.AXIS, facing == EnumFacing.NORTH ? EnumFacing.Axis.Z : EnumFacing.Axis.X)).generate(world, rand, pos.up());
+				break;
+			}
+		}
+
         for (attempt = 0; attempt < 3; attempt++) {
         	xx = x + offsetXZ();
         	yy = rand.nextInt(100);
@@ -67,7 +127,7 @@ public class BiomeDecoratorPetrifiedForest extends BiomeDecoratorBaseErebus {
 
 			for (yy = 20; yy < 100; yy += rand.nextInt(2) + 1) {
 				BlockPos pos = new BlockPos(xx, yy, zz);
-				if ((world.getBlockState(pos) == ModBlocks.VOLCANIC_ROCK.getDefaultState() || world.getBlockState(pos) == ModBlocks.PETRIFIED_WOOD_ROCK.getDefaultState())  && world.isAirBlock(pos.up())) {
+				if ((world.getBlockState(pos) == ModBlocks.VOLCANIC_ROCK.getDefaultState() || world.getBlockState(pos).getBlock() instanceof BlockPetrifiedWoodRock)  && world.isAirBlock(pos.up())) {
 					world.setBlockState(pos.up(), ModBlocks.DUST_LAYER.getDefaultState().withProperty(BlockDustLayer.LAYERS, rand.nextInt(3) + 1), 2);
 					break;
 				}
@@ -96,6 +156,39 @@ public class BiomeDecoratorPetrifiedForest extends BiomeDecoratorBaseErebus {
 				genScorchedWood.generate(world, rand, pos);
 				if (rand.nextInt(4) != 0)
 					break;
+			}
+		}
+
+		for (attempt = 0; attempt < 400; attempt++) {
+			xx = x + offsetXZ();
+			yy = rand.nextInt(120);
+			zz = z + offsetXZ();
+			BlockPos pos = new BlockPos(xx, yy, zz);
+			if ((checkSurface(SurfaceType.DUST, pos) || checkSurface(SurfaceType.VOLCANIC_ROCK, pos))  && !world.isAirBlock(pos.down(2))) {
+				new WorldGenPetrifiedTrees(6 + rand.nextInt(5), 1, ModBlocks.PETRIFIED_BARK_BROWN.getDefaultState().withProperty(BlockPetrifiedWoodRock.AXIS, EnumFacing.Axis.Y)).generate(world, rand, pos.up());
+				break;
+			}
+		}
+
+		for (attempt = 0; attempt < 22; attempt++) {
+			xx = x + offsetXZ();
+			yy = rand.nextInt(120);
+			zz = z + offsetXZ();
+			BlockPos pos = new BlockPos(xx, yy, zz);
+			if (checkSurface(SurfaceType.VOLCANIC_ROCK, pos) && !world.isAirBlock(pos.down(2))) {
+				new WorldGenPetrifiedTrees(11 + rand.nextInt(4), 2, ModBlocks.PETRIFIED_BARK_BROWN.getDefaultState().withProperty(BlockPetrifiedWoodRock.AXIS, EnumFacing.Axis.Y)).generate(world, rand, pos.up());
+				break;
+			}
+		}
+
+		for (attempt = 0; attempt < 22; attempt++) {
+			xx = x + offsetXZ();
+			yy = rand.nextInt(120);
+			zz = z + offsetXZ();
+			BlockPos pos = new BlockPos(xx, yy, zz);
+			if (checkSurface(SurfaceType.VOLCANIC_ROCK, pos) && !world.isAirBlock(pos.down(2))) {
+				new WorldGenPetrifiedTrees(16 + rand.nextInt(10), 3, ModBlocks.PETRIFIED_BARK_BROWN.getDefaultState().withProperty(BlockPetrifiedWoodRock.AXIS, EnumFacing.Axis.Y)).generate(world, rand, pos.up());
+				break;
 			}
 		}
 

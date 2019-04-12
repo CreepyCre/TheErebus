@@ -13,6 +13,7 @@ import erebus.ModTabs;
 import erebus.api.IErebusEnum;
 import erebus.items.ItemMaterials.EnumErebusMaterialsType;
 import erebus.items.block.ItemBlockEnum;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
@@ -27,8 +28,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -49,6 +52,16 @@ public class BlockSmallPlant extends BlockBush implements IGrowable, IShearable,
 	}
 
 	@Override
+    public Block.EnumOffsetType getOffsetType() {
+        return Block.EnumOffsetType.XZ;
+    }
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return BUSH_AABB.offset(state.getOffset(source, pos));
+	}
+
+	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] { PLANT_TYPE });
 	}
@@ -66,6 +79,17 @@ public class BlockSmallPlant extends BlockBush implements IGrowable, IShearable,
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		if (state.getValue(PLANT_TYPE) == EnumSmallPlantType.FIRE_BLOOM)
 			world.spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, 0.0D, 0.0D, 0.0D, new int[0]);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
 	}
 
 	@Override

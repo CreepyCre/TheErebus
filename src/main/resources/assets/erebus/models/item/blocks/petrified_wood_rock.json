@@ -1,3 +1,7 @@
 {
-    "parent":"erebus:block/petrified_wood_rock"
+  "forge_marker": 1,
+  "parent":"minecraft:block/cube_all",
+  "textures": {
+    "all": "erebus:blocks/petrified_wood_rock_1"
+  }
 }
